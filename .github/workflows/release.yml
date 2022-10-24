@@ -1,11 +1,9 @@
-name: Helm chart release
+name: Release Charts
 
 on:
   push:
     branches:
       - main
-    tags:
-      - '*'
 
 jobs:
   release:
@@ -18,16 +16,14 @@ jobs:
 
       - name: Configure Git
         run: |
-          git config user.name "GitHub Action"
-          git config user.email "action@github.com"
-
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
       - name: Install Helm
         uses: azure/setup-helm@v1
         with:
-          version: v3.7.0
+          version: v3.8.1
 
       - name: Run chart-releaser
-        uses: helm/chart-releaser-action@v1.2.1
+        uses: helm/chart-releaser-action@v1.4.0
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-          CR_RELEASE_NAME_TEMPLATE: "helm-chart-{{ .Version }}"
